@@ -1,0 +1,60 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: airflow
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: airflow
+      version: "1.22.0" 
+      sourceRef:
+        kind: HelmRepository
+        name: apache-airflow
+        namespace: flux-system
+  
+  values:
+    postgresql:
+      enabled: true
+      primary:
+        persistence:
+          enabled: false
+
+    redis:
+      enabled: true
+      persistence:
+        enabled: false
+
+    workers:
+      persistence:
+        enabled: false
+
+    triggerer:
+      persistence:
+        enabled: false
+
+    dags:
+      persistence:
+        enabled: false
+      gitSync:
+          enabled: true
+
+          # Git repo clone url
+          repo: https://gitlab.com/VladimirMalyshev/helm-airflow-dag.git
+          branch: main
+          subPath: ""
+
+    executor: "KubernetesExecutor"
+
+    allowJobLaunching: true
+
+    migrateDatabaseJob:
+      useHelmHooks: false
+
+    createUserJob:
+      useHelmHooks: false
+
+    env:
+    - name: "AIRFLOW__KUBERNETES_EXECUTOR__DELETE_WORKER_PODS"
+      value: "False"
