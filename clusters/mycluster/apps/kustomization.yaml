@@ -1,3 +1,4 @@
 resources: 
   - airflow-release.yaml
   - airflow-repository.yaml
+  - git::https://gitlab.com/VladimirMalyshev/helm-podinfo-flux
