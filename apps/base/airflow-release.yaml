@@ -13,8 +13,8 @@ spec:
         kind: HelmRepository
         name: apache-airflow
         namespace: flux-system
-  driftDetection:
-    mode: enabled
+  driftCorrection:
+    mode: Apply
   values:
     postgresql:
       enabled: true
